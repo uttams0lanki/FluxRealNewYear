@@ -308,11 +308,14 @@ function SwipeSlider({ onComplete }: { onComplete: () => void }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 1.2, duration: 0.5 }}
     >
-      {/* Label with subtle glow */}
+      {/* Label with subtle glow - darker on stage 0 for bright background */}
       <motion.p
-        className="text-[10px] tracking-[0.3em] mb-3 font-medium uppercase"
-        style={{ color: 'rgba(245,213,168,0.6)' }}
-        animate={{ opacity: [0.5, 0.8, 0.5] }}
+        className="text-[10px] tracking-[0.3em] mb-3 font-semibold uppercase"
+        style={{
+          color: currentStage === 0 ? 'rgba(5,5,5,0.7)' : 'rgba(245,213,168,0.6)',
+          textShadow: currentStage === 0 ? '0 1px 2px rgba(255,255,255,0.3)' : 'none',
+        }}
+        animate={{ opacity: [0.6, 1, 0.6] }}
         transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
       >
         {currentStage === 0 ? 'Slide to begin' : 'Slide to continue'}

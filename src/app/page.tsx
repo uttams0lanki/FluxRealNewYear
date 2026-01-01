@@ -39,7 +39,7 @@ function PageContent() {
   useEffect(() => {
     let mounted = true;
     const startTime = Date.now();
-    const MIN_LOADING_TIME = 4000; // Minimum 4 seconds to show loading animation
+    const MIN_LOADING_TIME = 2500; // Minimum 2.5 seconds to show loading animation
 
     const loadFrames = async () => {
       // Preload stage 0 first (critical path)

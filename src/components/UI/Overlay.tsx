@@ -5,6 +5,62 @@ import { motion, AnimatePresence, useMotionValue, useTransform, animate } from '
 import { usePeakStore } from '@/store/peakStore';
 import { CTA, STAGE_LABELS, TIMING } from '@/lib/constants';
 
+// Progress breadcrumb indicator
+function ProgressIndicator() {
+  const currentStage = usePeakStore((s) => s.currentStage);
+  const totalStages = 4; // Stages 0-3 have interactions, 4 auto-advances
+
+  if (currentStage >= 4) return null;
+
+  return (
+    <motion.div
+      className="absolute top-6 left-8 md:left-12 flex items-center gap-2"
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 1, duration: 0.5 }}
+    >
+      {[...Array(totalStages)].map((_, index) => (
+        <motion.div
+          key={index}
+          className="relative"
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ delay: 1.2 + index * 0.1 }}
+        >
+          {/* Background dot */}
+          <div
+            className="w-2 h-2 rounded-full"
+            style={{
+              background: index <= currentStage
+                ? 'rgba(245,166,35,0.8)'
+                : 'rgba(255,255,255,0.2)',
+              boxShadow: index <= currentStage
+                ? '0 0 8px rgba(245,166,35,0.5)'
+                : 'none',
+            }}
+          />
+          {/* Active pulse */}
+          {index === currentStage && (
+            <motion.div
+              className="absolute inset-0 w-2 h-2 rounded-full"
+              style={{ background: 'rgba(245,166,35,0.5)' }}
+              animate={{ scale: [1, 2, 1], opacity: [0.5, 0, 0.5] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            />
+          )}
+        </motion.div>
+      ))}
+      {/* Progress text */}
+      <motion.span
+        className="ml-2 text-[10px] tracking-[0.2em] font-light"
+        style={{ color: 'rgba(255,255,255,0.3)' }}
+      >
+        {currentStage + 1}/{totalStages}
+      </motion.span>
+    </motion.div>
+  );
+}
+
 // Stage label display
 function StageLabel() {
   const currentStage = usePeakStore((s) => s.currentStage);
@@ -42,13 +98,49 @@ function StageLabel() {
           </motion.span>
         ))}
       </div>
-      {/* Accent line */}
-      <motion.div
-        initial={{ scaleX: 0 }}
-        animate={{ scaleX: 1 }}
-        transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-        className="h-[2px] w-16 bg-gradient-to-r from-yellow-400 to-transparent mt-4 origin-left"
-      />
+      {/* Animated accent line */}
+      <div className="relative mt-4 h-[2px] w-20 overflow-hidden">
+        {/* Base line */}
+        <motion.div
+          className="absolute inset-0 bg-gradient-to-r from-[#F5A623] to-transparent"
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: 1 }}
+          transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
+          style={{ transformOrigin: 'left' }}
+        />
+        {/* Shimmer effect */}
+        <motion.div
+          className="absolute inset-0"
+          style={{
+            background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.6) 50%, transparent 100%)',
+            width: '50%',
+          }}
+          animate={{ x: ['-100%', '250%'] }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: "easeInOut",
+            repeatDelay: 1,
+          }}
+        />
+        {/* Glowing end dot */}
+        <motion.div
+          className="absolute right-0 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full"
+          style={{
+            background: '#F5A623',
+            boxShadow: '0 0 8px #F5A623',
+          }}
+          animate={{
+            opacity: [0.5, 1, 0.5],
+            scale: [0.8, 1.2, 0.8],
+          }}
+          transition={{
+            duration: 1.5,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+      </div>
     </motion.div>
   );
 }
@@ -594,6 +686,7 @@ export default function Overlay() {
   return (
     <div className="absolute inset-0 z-10">
       <TouchSparkles />
+      <ProgressIndicator />
       <SoundToggle />
 
       <AnimatePresence mode="wait">

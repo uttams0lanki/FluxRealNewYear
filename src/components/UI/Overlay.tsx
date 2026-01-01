@@ -65,7 +65,7 @@ interface Sparkle {
   rotation: number;
 }
 
-const SPARKLE_COLORS = ['#F5A623', '#F5D5A8', '#FFE4B5', '#FFC966'];
+const SPARKLE_COLORS = ['#F5A623', '#E8883A', '#FFC966', '#FFB347'];
 
 function TouchSparkles() {
   const [sparkles, setSparkles] = useState<Sparkle[]>([]);

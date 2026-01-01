@@ -31,78 +31,51 @@ export default function LoadingScreen({ progress = 0 }: LoadingScreenProps) {
         }}
       />
 
-      {/* Logo mark - matching original proportions */}
+      {/* Logo mark - using actual PNG */}
       <motion.div
-        className="relative mb-12"
+        className="relative mb-8"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
       >
-        {/* Outer pill outline */}
-        <motion.div
-          className="relative flex items-center justify-center"
-          style={{
-            width: 72,
-            height: 120,
-            borderRadius: 36,
-            border: '3px solid #F5D5A8',
-          }}
+        {/* Logomark image */}
+        <motion.img
+          src="/Vertical_Logo_Icon.png"
+          alt="Flux Real"
+          style={{ width: 80, height: 'auto' }}
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-        >
-          {/* Inner filled shape - rounded rectangle filling most of the space */}
-          <motion.div
-            style={{
-              width: 52,
-              height: 88,
-              borderRadius: 20,
-              background: 'linear-gradient(180deg, #F5D5A8 0%, #F5A623 40%, #E8883A 100%)',
-            }}
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-          />
-        </motion.div>
+        />
 
-        {/* Orbiting particle */}
+        {/* Orbiting particle - around top portion where filled shape is */}
         <motion.div
           className="absolute"
-          style={{ top: '50%', left: '50%' }}
+          style={{ top: '30%', left: '50%', marginLeft: -4 }}
           animate={{ rotate: 360 }}
-          transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+          transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
         >
           <motion.div
             className="w-2 h-2 rounded-full"
             style={{
               background: '#F5A623',
               boxShadow: '0 0 10px #F5A623, 0 0 20px #F5A623',
-              transform: 'translateX(55px) translateY(-50%)',
+              transform: 'translateX(52px)',
             }}
           />
         </motion.div>
       </motion.div>
 
-      {/* Brand text */}
-      <motion.div
-        className="flex items-center gap-1 mb-10"
+      {/* Brand text - using actual PNG */}
+      <motion.img
+        src="/Horizontal_Text_Logo.png"
+        alt="Flux Real"
+        className="mb-10"
+        style={{ width: 180, height: 'auto' }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6, delay: 0.6 }}
-      >
-        <span
-          className="text-2xl font-bold tracking-[0.3em]"
-          style={{ color: '#F5D5A8' }}
-        >
-          FLUX
-        </span>
-        <span
-          className="text-2xl font-light tracking-[0.3em]"
-          style={{ color: '#F5A623' }}
-        >
-          REAL
-        </span>
-      </motion.div>
+      />
 
       {/* Progress bar */}
       <motion.div

@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useCallback, useEffect } from 'react';
+import { useRef, useCallback, useEffect, RefObject } from 'react';
 import { FRAME_CONFIG, StageKey } from '@/lib/frameConfig';
 
 interface PlaybackState {
@@ -11,7 +11,8 @@ interface PlaybackState {
 export function useSequencePlayback(
   stage: StageKey,
   frames: HTMLImageElement[],
-  onComplete?: () => void
+  onComplete?: () => void,
+  containerRef?: RefObject<HTMLDivElement>
 ) {
   const stateRef = useRef<PlaybackState>({ currentFrame: 0, isPlaying: false });
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -29,11 +30,12 @@ export function useSequencePlayback(
     const canvas = canvasRef.current;
     const ctx = canvas?.getContext('2d');
     const frame = frames[frameIndex];
+    const container = containerRef?.current;
 
     if (canvas && ctx && frame && frame.complete && frame.naturalWidth > 0) {
-      // Use logical dimensions (ctx is already scaled by dpr)
-      const logicalWidth = window.innerWidth;
-      const logicalHeight = window.innerHeight;
+      // Use container dimensions if available, otherwise window
+      const logicalWidth = container ? container.clientWidth : window.innerWidth;
+      const logicalHeight = container ? container.clientHeight : window.innerHeight;
 
       // Calculate scaling to cover the canvas (like object-fit: cover)
       const canvasRatio = logicalWidth / logicalHeight;
@@ -62,7 +64,7 @@ export function useSequencePlayback(
       ctx.fillRect(0, 0, logicalWidth, logicalHeight);
       ctx.drawImage(frame, offsetX, offsetY, drawWidth, drawHeight);
     }
-  }, [frames]);
+  }, [frames, containerRef]);
 
   const animate = useCallback((timestamp: number) => {
     if (!stateRef.current.isPlaying) return;

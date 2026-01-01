@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { usePeakStore, Stage } from '@/store/peakStore';
 import { useFrameLoader } from './useFrameLoader';
 import { useSequencePlayback } from './useSequencePlayback';
@@ -9,13 +9,14 @@ import { StageKey } from '@/lib/frameConfig';
 export default function SequencePlayer() {
   const currentStage = usePeakStore((s) => s.currentStage);
   const advance = usePeakStore((s) => s.advance);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [activeStage, setActiveStage] = useState<StageKey>(
     currentStage < 5 ? (currentStage as StageKey) : 4
   );
 
   // Load frames for current stage
   const { frames, isLoaded } = useFrameLoader(activeStage);
-  
+
   // Handle stage completion
   const handleStageComplete = useCallback(() => {
     if (activeStage === 4) {
@@ -27,7 +28,8 @@ export default function SequencePlayer() {
   const { canvasRef, play, stop, drawFrame } = useSequencePlayback(
     activeStage,
     frames,
-    handleStageComplete
+    handleStageComplete,
+    containerRef
   );
 
   // Handle stage changes from store
@@ -52,20 +54,22 @@ export default function SequencePlayer() {
   // Handle canvas resize
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    const container = containerRef.current;
+    if (!canvas || !container) return;
 
     const resize = () => {
+      const rect = container.getBoundingClientRect();
       const dpr = window.devicePixelRatio || 1;
-      canvas.width = window.innerWidth * dpr;
-      canvas.height = window.innerHeight * dpr;
-      canvas.style.width = `${window.innerWidth}px`;
-      canvas.style.height = `${window.innerHeight}px`;
-      
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      canvas.style.width = `${rect.width}px`;
+      canvas.style.height = `${rect.height}px`;
+
       const ctx = canvas.getContext('2d');
       if (ctx) {
         ctx.scale(dpr, dpr);
       }
-      
+
       // Redraw current frame if we have frames
       if (frames.length > 0) {
         drawFrame(0);
@@ -75,7 +79,7 @@ export default function SequencePlayer() {
     resize();
     window.addEventListener('resize', resize);
     window.addEventListener('orientationchange', resize);
-    
+
     return () => {
       window.removeEventListener('resize', resize);
       window.removeEventListener('orientationchange', resize);
@@ -83,13 +87,15 @@ export default function SequencePlayer() {
   }, [canvasRef, frames, drawFrame]);
 
   return (
-    <canvas
-      ref={canvasRef}
-      className="fixed inset-0 w-full h-full"
-      style={{ 
-        background: '#050505',
-        touchAction: 'none',
-      }}
-    />
+    <div ref={containerRef} className="absolute inset-0">
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 w-full h-full"
+        style={{
+          background: '#050505',
+          touchAction: 'none',
+        }}
+      />
+    </div>
   );
 }

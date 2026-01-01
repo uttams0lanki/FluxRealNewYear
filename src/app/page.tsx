@@ -82,18 +82,26 @@ function PageContent() {
   }, [setLoaded]);
   
   return (
-    <main className="fixed inset-0 bg-[#050505] overflow-hidden touch-none select-none">
-      {/* Frame Sequence Player */}
-      {!showLoading && <SequencePlayer />}
-      
-      {/* UI Overlay */}
-      {!showLoading && <Overlay />}
-      
-      {/* Loading Screen */}
-      <AnimatePresence>
-        {showLoading && <LoadingScreen progress={loadProgress} />}
-      </AnimatePresence>
-    </main>
+    <div className="fixed inset-0 bg-[#050505] flex items-center justify-center">
+      {/* Mobile-locked container - 9:16 aspect ratio on desktop, full screen on mobile */}
+      <main
+        className="relative bg-[#050505] overflow-hidden touch-none select-none
+                   w-full h-full
+                   md:w-auto md:h-full md:aspect-[9/16] md:max-h-screen
+                   lg:max-w-[500px]"
+      >
+        {/* Frame Sequence Player */}
+        {!showLoading && <SequencePlayer />}
+
+        {/* UI Overlay */}
+        {!showLoading && <Overlay />}
+
+        {/* Loading Screen */}
+        <AnimatePresence>
+          {showLoading && <LoadingScreen progress={loadProgress} />}
+        </AnimatePresence>
+      </main>
+    </div>
   );
 }
 

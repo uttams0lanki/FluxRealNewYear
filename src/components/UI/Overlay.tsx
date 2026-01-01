@@ -16,14 +16,14 @@ function ProgressIndicator() {
     <motion.div
       className="absolute top-6 left-8 right-8 md:left-12 md:right-12 flex items-center gap-2"
       initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
+      animate={{ opacity: 0.4 }}
       transition={{ delay: 1, duration: 0.5 }}
     >
       {[...Array(totalStages)].map((_, index) => (
         <motion.div
           key={index}
-          className="relative flex-1 h-[2px] overflow-hidden rounded-full"
-          style={{ background: 'rgba(255,255,255,0.1)' }}
+          className="relative flex-1 h-[1px] overflow-hidden rounded-full"
+          style={{ background: 'rgba(255,255,255,0.15)' }}
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
           transition={{ delay: 1.1 + index * 0.1, duration: 0.4 }}
@@ -33,27 +33,13 @@ function ProgressIndicator() {
             className="absolute inset-0 rounded-full origin-left"
             style={{
               background: index <= currentStage
-                ? 'linear-gradient(90deg, #F5A623 0%, #E8883A 100%)'
+                ? 'rgba(245,166,35,0.7)'
                 : 'transparent',
-              boxShadow: index <= currentStage
-                ? '0 0 8px rgba(245,166,35,0.3)'
-                : 'none',
             }}
             initial={{ scaleX: 0 }}
             animate={{ scaleX: index <= currentStage ? 1 : 0 }}
             transition={{ duration: 0.5, delay: index <= currentStage ? 0.2 : 0 }}
           />
-          {/* Active shimmer */}
-          {index === currentStage && (
-            <motion.div
-              className="absolute inset-0"
-              style={{
-                background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.4) 50%, transparent 100%)',
-              }}
-              animate={{ x: ['-100%', '200%'] }}
-              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut", repeatDelay: 0.5 }}
-            />
-          )}
         </motion.div>
       ))}
     </motion.div>

@@ -485,6 +485,8 @@ function CTAOverlay() {
           >
             {CTA.title}
             <br />
+            {CTA.titleSub}
+            <br />
             <span style={{ color: '#F5A623' }}>{CTA.titleHighlight}</span>
           </motion.h1>
         </div>

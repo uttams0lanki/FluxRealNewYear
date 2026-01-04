@@ -25,7 +25,8 @@ export const STAGE_LABELS: Record<number, string> = {
 export const CTA = {
   header: 'FLUX REAL // H1 2026',
   title: 'Experiential Design:',
-  titleHighlight: 'Powered by Conversational AI',
+  titleSub: 'Powered by',
+  titleHighlight: 'Conversational AI',
   subtitle: 'PropTech · Expos & Events',
   subtitleHighlight: 'Hospitality',
   events: [

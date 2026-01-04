@@ -475,19 +475,31 @@ function CTAOverlay() {
           style={{ background: 'linear-gradient(90deg, #F5A623 0%, transparent 100%)' }}
         />
 
-        {/* Main title with character stagger */}
-        <div className="overflow-hidden mb-10">
+        {/* Main title */}
+        <div className="overflow-hidden mb-4">
           <motion.h1
             initial={{ y: '100%' }}
             animate={{ y: 0 }}
             transition={{ duration: 0.9, delay: 0.4, ease: smoothEase }}
-            className="text-3xl md:text-4xl lg:text-5xl font-extralight text-white leading-[1.2] tracking-tight"
+            className="text-2xl md:text-3xl lg:text-4xl font-extralight text-white leading-[1.2] tracking-tight"
           >
-            Conversational AI Agents
+            {CTA.title.split(':')[0]}:
             <br />
-            <span className="font-light">&amp; The Future of</span>{' '}
-            <span style={{ color: '#F5A623' }}>UX</span>
+            <span style={{ color: '#F5A623' }}>{CTA.title.split(':')[1]}</span>
           </motion.h1>
+        </div>
+
+        {/* Subtitle */}
+        <div className="overflow-hidden mb-8">
+          <motion.p
+            initial={{ y: '100%' }}
+            animate={{ y: 0 }}
+            transition={{ duration: 0.7, delay: 0.6, ease: smoothEase }}
+            className="text-xs md:text-sm tracking-[0.15em] font-light"
+            style={{ color: 'rgba(245,213,168,0.7)' }}
+          >
+            {CTA.subtitle}
+          </motion.p>
         </div>
 
         {/* Events with staggered reveal */}
@@ -502,16 +514,20 @@ function CTAOverlay() {
               key={index}
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.9 + index * 0.1, ease: smoothEase }}
-              className="flex items-start gap-3"
+              transition={{ duration: 0.6, delay: 0.9 + index * 0.08, ease: smoothEase }}
+              className="flex items-start gap-2"
             >
-              <span className="w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0" style={{ background: '#F5A623' }} />
+              <span className="w-1 h-1 rounded-full mt-2 flex-shrink-0" style={{ background: '#F5A623' }} />
               <div className="flex flex-col">
-                <span className="text-white/90 font-light text-sm md:text-base">{event.name}</span>
-                <div className="flex items-center gap-2 mt-0.5">
-                  <span className="text-white/50 text-xs md:text-sm">{event.location}</span>
-                  <span style={{ color: 'rgba(245,166,35,0.4)' }} className="text-xs">•</span>
-                  <span style={{ color: '#F5A623' }} className="font-semibold text-xs md:text-sm">{event.dates}</span>
+                <span className="text-white/90 font-light text-xs md:text-sm">{event.name}</span>
+                <div className="flex items-center gap-1.5 mt-0.5">
+                  {event.location && (
+                    <>
+                      <span className="text-white/50 text-[10px] md:text-xs">{event.location}</span>
+                      <span style={{ color: 'rgba(245,166,35,0.4)' }} className="text-[10px]">•</span>
+                    </>
+                  )}
+                  <span style={{ color: '#F5A623' }} className="font-medium text-[10px] md:text-xs">{event.dates}</span>
                 </div>
               </div>
             </motion.div>
